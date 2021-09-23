@@ -104,7 +104,11 @@ class Plugin extends \tad_DI52_ServiceProvider {
 
 		// Start binds.
 
-
+		// Make it work in v1.
+		add_action( 'tribe_events_filters_create_filters', [ $this, 'tec_kb_create_filter' ] );
+		// Make it work in v2.
+		add_filter( 'tribe_context_locations', [ $this, 'tec_kb_filter_context_locations' ] );
+		add_filter( 'tribe_events_filter_bar_context_to_filter_map', [ $this, 'tec_kb_filter_map' ] );
 
 		// End binds.
 
@@ -150,7 +154,7 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 * TODO: Remove if not using settings
 	 */
 	private function get_options_prefix() {
-		return (string) str_replace( '-', '_', 'tribe-ext-custom-category-filter' );
+		return (string) str_replace( '-', '_', 'tec-labs-custom-category-filter' );
 	}
 
 	/**
@@ -196,4 +200,67 @@ class Plugin extends \tad_DI52_ServiceProvider {
 
 		return $settings->get_option( $option, $default );
 	}
+
+	/**
+	 * Filters the Context locations to let the Context know how to fetch the value of the filter from a request.
+	 *
+	 * Here we add the `timeofdaycustom` as a read-only Context location: we'll not need to write it.
+	 *
+	 * @param array<string,array> $locations A map of the locations the Context supports and is able to read from and write
+	 *                                       to.
+	 *
+	 * @return array<string,array> The filtered map of Context locations, with the one required from the filter added to it.
+	 */
+	function tec_kb_filter_context_locations( array $locations ) {
+		// Read the filter selected values, if any, from the URL request vars.
+		$locations['filterbar_category_custom'] = [ 'read' => [ \Tribe__Context::REQUEST_VAR => 'filterbar_category_custom' ], ];
+		//$locations['filterbar_category_custom_two'] = [ 'read' => [ \Tribe__Context::REQUEST_VAR => 'filterbar_category_custom_two' ], ];
+
+		return $locations;
+	}
+
+	/**
+	 * Filters the map of filters available on the front-end to include the custom one.
+	 *
+	 * @param array<string,string> $map A map relating the filter slugs to their respective classes.
+	 *
+	 * @return array<string,string> The filtered slug to filter class map.
+	 */
+	function tec_kb_filter_map( array $map ) {
+		if ( ! class_exists( 'Tribe__Events__Filterbar__Filter' ) ) {
+			// This would not make much sense, but let's be cautious.
+			return $map;
+		}
+
+		include_once plugin_dir_path( __FILE__ ) . '/filters/Category_Custom.php';
+		//include_once __DIR__ . '/src/Category_Custom_Two.php';
+
+		$map['filterbar_category_custom'] = 'Category_Custom';
+		//$map['filterbar_category_custom'] = 'Category_Custom_Two';
+
+		return $map;
+	}
+
+	/**
+	 * Includes the custom filter class and creates an instance of it.
+	 */
+	function tec_kb_create_filter() {
+		if ( ! class_exists( 'Tribe__Events__Filterbar__Filter' ) ) {
+			return;
+		}
+
+		include_once plugin_dir_path( __FILE__ ) . '/filters/Category_Custom.php';
+		//include_once __DIR__ . '/src/Category_Custom_Two.php';
+
+		new \Category_Custom(
+			__( 'Custom Category Filter', 'tribe-events-filter-view' ),
+			'filterbar_category_custom'
+		);
+
+		/*new \Category_Custom_Two(
+			__( 'Custom Category Filter 2', 'tribe-events-filter-view' ),
+			'filterbar_category_custom_two'
+		);*/
+	}
+
 }
