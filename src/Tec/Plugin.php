@@ -4,17 +4,17 @@
  *
  * @since 1.0.0
  *
- * @package Tribe\Extensions\Custom_Category_Filter
+ * @package TEC\Extensions\Custom_Category_Filter_Groups
  */
 
-namespace Tribe\Extensions\Custom_Category_Filter;
+namespace TEC\Extensions\Custom_Category_Filter_Groups;
 
 /**
  * Class Plugin
  *
  * @since 1.0.0
  *
- * @package Tribe\Extensions\Custom_Category_Filter
+ * @package TEC\Extensions\Custom_Category_Filter_Groups
  */
 class Plugin extends \tad_DI52_ServiceProvider {
 	/**
@@ -42,7 +42,7 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 *
 	 * @var string
 	 */
-	const FILE = TRIBE_EXTENSION_CUSTOM_CATEGORY_FILTER_FILE;
+	const FILE = TEC_EXTENSION_CUSTOM_CATEGORY_FILTER_GROUPS_FILE;
 
 	/**
 	 * @since 1.0.0
@@ -68,11 +68,9 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	/**
 	 * @since 1.0.0
 	 *
-	 * @var Settings
-	 *
-	 * TODO: Remove if not using settings
+	 * @var int The number of groups to activate.
 	 */
-	private $settings;
+	public $number_of_filter_groups = 1;
 
 	/**
 	 * Setup the Extension's properties.
@@ -89,8 +87,8 @@ class Plugin extends \tad_DI52_ServiceProvider {
 
 		// Register this provider as the main one and use a bunch of aliases.
 		$this->container->singleton( static::class, $this );
-		$this->container->singleton( 'extension.custom_category_filter', $this );
-		$this->container->singleton( 'extension.custom_category_filter.plugin', $this );
+		$this->container->singleton( 'extension.custom_category_filter_groups', $this );
+		$this->container->singleton( 'extension.custom_category_filter_groups.plugin', $this );
 		$this->container->register( PUE::class );
 
 		if ( ! $this->check_plugin_dependencies() ) {
@@ -98,19 +96,17 @@ class Plugin extends \tad_DI52_ServiceProvider {
 			return;
 		}
 
-		// Do the settings.
-		// TODO: Remove if not using settings
-		$this->get_settings();
-
 		// Start binds.
 
 		// Make it work in v1.
-		add_action( 'tribe_events_filters_create_filters', [ $this, 'tec_kb_create_filter' ] );
+		add_action( 'tribe_events_filters_create_filters', [ $this, 'tec_labs_create_filter' ] );
 		// Make it work in v2.
-		add_filter( 'tribe_context_locations', [ $this, 'tec_kb_filter_context_locations' ] );
-		add_filter( 'tribe_events_filter_bar_context_to_filter_map', [ $this, 'tec_kb_filter_map' ] );
+		add_filter( 'tribe_context_locations', [ $this, 'tec_labs_filter_context_locations' ] );
+		add_filter( 'tribe_events_filter_bar_context_to_filter_map', [ $this, 'tec_labs_filter_map' ] );
 
 		// End binds.
+
+		$this->number_of_filter_groups = apply_filters( 'tec_labs_custom_category_filter_groups_number', $this->number_of_filter_groups );
 
 		$this->container->register( Hooks::class );
 		$this->container->register( Assets::class );
@@ -139,128 +135,92 @@ class Plugin extends \tad_DI52_ServiceProvider {
 		$plugin_register->register_plugin();
 
 		$this->container->singleton( Plugin_Register::class, $plugin_register );
-		$this->container->singleton( 'extension.custom_category_filter', $plugin_register );
-	}
-
-	/**
-	 * Get this plugin's options prefix.
-	 *
-	 * Settings_Helper will append a trailing underscore before each option.
-	 *
-	 * @return string
-     *
-	 * @see \Tribe\Extensions\Custom_Category_Filter\Settings::set_options_prefix()
-	 *
-	 * TODO: Remove if not using settings
-	 */
-	private function get_options_prefix() {
-		return (string) str_replace( '-', '_', 'tec-labs-custom-category-filter' );
-	}
-
-	/**
-	 * Get Settings instance.
-	 *
-	 * @return Settings
-	 *
-	 * TODO: Remove if not using settings
-	 */
-	private function get_settings() {
-		if ( empty( $this->settings ) ) {
-			$this->settings = new Settings( $this->get_options_prefix() );
-		}
-
-		return $this->settings;
-	}
-
-	/**
-	 * Get all of this extension's options.
-	 *
-	 * @return array
-	 *
-	 * TODO: Remove if not using settings
-	 */
-	public function get_all_options() {
-		$settings = $this->get_settings();
-
-		return $settings->get_all_options();
-	}
-
-	/**
-	 * Get a specific extension option.
-	 *
-	 * @param $option
-	 * @param string $default
-	 *
-	 * @return array
-	 *
-	 * TODO: Remove if not using settings
-	 */
-	public function get_option( $option, $default = '' ) {
-		$settings = $this->get_settings();
-
-		return $settings->get_option( $option, $default );
+		$this->container->singleton( 'extension.custom_category_filter_groups.dependencies', $plugin_register );
 	}
 
 	/**
 	 * Filters the Context locations to let the Context know how to fetch the value of the filter from a request.
 	 *
-	 * Here we add the `timeofdaycustom` as a read-only Context location: we'll not need to write it.
+	 * Here we add the `filterbar_category_custom` as a read-only Context location: we'll not need to write it.
 	 *
 	 * @param array<string,array> $locations A map of the locations the Context supports and is able to read from and write
 	 *                                       to.
 	 *
 	 * @return array<string,array> The filtered map of Context locations, with the one required from the filter added to it.
 	 */
-	function tec_kb_filter_context_locations( array $locations ) {
+	function tec_labs_filter_context_locations( array $locations ) {
 		// Read the filter selected values, if any, from the URL request vars.
-		$locations['filterbar_category_custom'] = [ 'read' => [ \Tribe__Context::REQUEST_VAR => 'filterbar_category_custom' ], ];
-		//$locations['filterbar_category_custom_two'] = [ 'read' => [ \Tribe__Context::REQUEST_VAR => 'filterbar_category_custom_two' ], ];
 
+		for ( $i = 1; $i <= $this->number_of_filter_groups; $i++ ) {
+			$locations[ 'filterbar_category_custom_' . $i ] = [
+				'read' => [ \Tribe__Context::REQUEST_VAR => 'tribe_filterbar_category_custom_' . $i ],
+			];
+		}
+		/*
+		$locations[ 'filterbar_category_custom_1' ] = [
+			'read' => [ \Tribe__Context::REQUEST_VAR => 'tribe_filterbar_category_custom_1' ],
+		];
+		*/
 		return $locations;
 	}
 
 	/**
-	 * Filters the map of filters available on the front-end to include the custom one.
+	 * Filters the map of filters available on the front-end to include the custom one(s).
 	 *
 	 * @param array<string,string> $map A map relating the filter slugs to their respective classes.
 	 *
 	 * @return array<string,string> The filtered slug to filter class map.
 	 */
-	function tec_kb_filter_map( array $map ) {
-		if ( ! class_exists( 'Tribe__Events__Filterbar__Filter' ) ) {
-			// This would not make much sense, but let's be cautious.
-			return $map;
+	function tec_labs_filter_map( array $map ) {
+
+		for ( $i = 1; $i <= $this->number_of_filter_groups; $i++ ) {
+			$classname = "Category_Custom_{$i}";
+			$class     = 'TEC\Extensions\Custom_Category_Filter_Groups\Filters\\' . $classname;
+			$path      = plugin_dir_path( __FILE__ ) . "/Filters/{$classname}.php";
+			include_once $path;
+
+			$map[ 'filterbar_category_custom_' . $i  ] = $class;
 		}
 
-		include_once plugin_dir_path( __FILE__ ) . '/filters/Category_Custom.php';
-		//include_once __DIR__ . '/src/Category_Custom_Two.php';
+		/*
+		include_once plugin_dir_path( __FILE__ ) . '/Filters/Category_Custom_1.php';
 
-		$map['filterbar_category_custom'] = 'Category_Custom';
-		//$map['filterbar_category_custom'] = 'Category_Custom_Two';
-
+		$map[ 'filterbar_category_custom_1' ] = $class;
+		*/
 		return $map;
 	}
 
 	/**
-	 * Includes the custom filter class and creates an instance of it.
+	 * Includes the custom filter class(es) and creates instance(s).
 	 */
-	function tec_kb_create_filter() {
+	function tec_labs_create_filter() {
 		if ( ! class_exists( 'Tribe__Events__Filterbar__Filter' ) ) {
 			return;
 		}
 
-		include_once plugin_dir_path( __FILE__ ) . '/filters/Category_Custom.php';
-		//include_once __DIR__ . '/src/Category_Custom_Two.php';
 
-		new \Category_Custom(
-			__( 'Custom Category Filter', 'tribe-events-filter-view' ),
-			'filterbar_category_custom'
+		for ( $i = 1; $i <= $this->number_of_filter_groups; $i++ ) {
+			$classname = "Category_Custom_{$i}";
+			$class     = 'TEC\Extensions\Custom_Category_Filter_Groups\Filters\\' . $classname;
+			$path      = plugin_dir_path( __FILE__ ) . "/Filters/{$classname}.php";
+
+			include_once $path;
+
+			new $class (
+				__( "Custom Category Filter {$i}", 'tribe-events-filter-view' ),
+				"filterbar_category_custom_{$i}"
+			);
+
+		}
+
+		/*
+		include_once plugin_dir_path( __FILE__ ) . '/Filters/Category_Custom_1.php';
+
+		new Filters\Category_Custom_1 (
+			__( 'Custom Category Filter 1', 'tribe-events-filter-view' ),
+			'filterbar_category_custom_1'
 		);
-
-		/*new \Category_Custom_Two(
-			__( 'Custom Category Filter 2', 'tribe-events-filter-view' ),
-			'filterbar_category_custom_two'
-		);*/
+		*/
 	}
 
 }

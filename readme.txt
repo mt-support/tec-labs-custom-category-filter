@@ -25,6 +25,15 @@ Install and activate like any other plugin!
 * You can unzip the plugin and then upload to your plugin directory (typically _wp-content/plugins_) via FTP
 * Once it has been installed or uploaded, simply visit the main plugin list and activate it
 
+== Setup and Customization ==
+Each filter group has a `tec_labs_custom_category_{$alias}_filter_wanted_categories` filter, where {$alias} is replaced with the
+filer-specific alias (the number 1-5)
+
+This extension is set up to run one custom category filter group. The `tec_labs_custom_category_filter_groups_number` filter
+lets you add additional filter groups (up to 5!). It defaults to one (1) but you can filter this value up to five with
+no modifications to this extension. If you need more (!) you will have to copy one of the classes in src/Tec/Filters
+and rework it for the new number.
+
 == Frequently Asked Questions ==
 
 = Where can I find more extensions? =

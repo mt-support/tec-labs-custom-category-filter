@@ -4,10 +4,10 @@
  *
  * @since 1.0.0
  *
- * @package Tribe\Extensions\Custom_Category_Filter;
+ * @package TEC\Extensions\Custom_Category_Filter_Groups;
  */
 
-namespace Tribe\Extensions\Custom_Category_Filter;
+namespace TEC\Extensions\Custom_Category_Filter_Groups;
 
 use Tribe__PUE__Checker;
 
@@ -16,7 +16,7 @@ use Tribe__PUE__Checker;
  *
  * @since 1.0.0
  *
- * @package Tribe\Extensions\Custom_Category_Filter;
+ * @package TEC\Extensions\Custom_Category_Filter_Groups;
  */
 class PUE extends \tad_DI52_ServiceProvider {
 
@@ -63,7 +63,7 @@ class PUE extends \tad_DI52_ServiceProvider {
 	 */
 	public function register() {
 		$this->container->singleton( static::class, $this );
-		$this->container->singleton( 'extension.custom_category_filter.pue', $this );
+		$this->container->singleton( 'extension.custom_category_filter_groups.pue', $this );
 
 		// Bail to avoid notice.
 		if ( ! static:: $is_active ) {
