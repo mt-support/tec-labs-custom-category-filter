@@ -156,11 +156,7 @@ class Plugin extends \tad_DI52_ServiceProvider {
 				'read' => [ \Tribe__Context::REQUEST_VAR => 'tribe_filterbar_category_custom_' . $i ],
 			];
 		}
-		/*
-		$locations[ 'filterbar_category_custom_1' ] = [
-			'read' => [ \Tribe__Context::REQUEST_VAR => 'tribe_filterbar_category_custom_1' ],
-		];
-		*/
+
 		return $locations;
 	}
 
@@ -182,11 +178,6 @@ class Plugin extends \tad_DI52_ServiceProvider {
 			$map[ 'filterbar_category_custom_' . $i  ] = $class;
 		}
 
-		/*
-		include_once plugin_dir_path( __FILE__ ) . '/Filters/Category_Custom_1.php';
-
-		$map[ 'filterbar_category_custom_1' ] = $class;
-		*/
 		return $map;
 	}
 
@@ -212,15 +203,6 @@ class Plugin extends \tad_DI52_ServiceProvider {
 			);
 
 		}
-
-		/*
-		include_once plugin_dir_path( __FILE__ ) . '/Filters/Category_Custom_1.php';
-
-		new Filters\Category_Custom_1 (
-			__( 'Custom Category Filter 1', 'tribe-events-filter-view' ),
-			'filterbar_category_custom_1'
-		);
-		*/
 	}
 
 }
