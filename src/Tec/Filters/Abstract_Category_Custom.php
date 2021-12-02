@@ -130,6 +130,8 @@ abstract class Abstract_Category_Custom extends \Tribe__Events__Filterbar__Filte
 			$values
 		);
 
+		$clause = str_replace( ",", "','", $clause );
+
 		$this->whereClause .= " AND ( {$clause} )";
 	}
 }
