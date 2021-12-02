@@ -10,17 +10,17 @@
  *
  * @since 1.0.0
  *
- * @package Tribe\Extensions\Custom_Category_Filter
+ * @package TEC\Extensions\Custom_Category_Filter_Groups
  */
 
-namespace Tribe\Extensions\Custom_Category_Filter;
+namespace TEC\Extensions\Custom_Category_Filter_Groups;
 
 /**
  * Register Assets.
  *
  * @since 1.0.0
  *
- * @package Tribe\Extensions\Custom_Category_Filter
+ * @package TEC\Extensions\Custom_Category_Filter_Groups
  */
 class Assets extends \tad_DI52_ServiceProvider {
 	/**
@@ -30,7 +30,7 @@ class Assets extends \tad_DI52_ServiceProvider {
 	 */
 	public function register() {
 		$this->container->singleton( static::class, $this );
-		$this->container->singleton( 'extension.custom_category_filter.assets', $this );
+		$this->container->singleton( 'extension.custom_category_filter_groups.assets', $this );
 
 		$plugin = tribe( Plugin::class );
 

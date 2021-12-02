@@ -4,22 +4,22 @@
  *
  * To remove a filter:
  * ```php
- *  remove_filter( 'some_filter', [ tribe( Tribe\Extensions\Custom_Category_Filter\Hooks::class ), 'some_filtering_method' ] );
- *  remove_filter( 'some_filter', [ tribe( 'extension.custom_category_filter.hooks' ), 'some_filtering_method' ] );
+ *  remove_filter( 'some_filter', [ tribe( Tribe\Extensions\Custom_Category_Filter_Groups\Hooks::class ), 'some_filtering_method' ] );
+ *  remove_filter( 'some_filter', [ tribe( 'extension.custom_category_filter_groups.hooks' ), 'some_filtering_method' ] );
  * ```
  *
  * To remove an action:
  * ```php
- *  remove_action( 'some_action', [ tribe( Tribe\Extensions\Custom_Category_Filter\Hooks::class ), 'some_method' ] );
- *  remove_action( 'some_action', [ tribe( 'extension.custom_category_filter.hooks' ), 'some_method' ] );
+ *  remove_action( 'some_action', [ tribe( Tribe\Extensions\Custom_Category_Filter_Groups\Hooks::class ), 'some_method' ] );
+ *  remove_action( 'some_action', [ tribe( 'extension.custom_category_filter_groups.hooks' ), 'some_method' ] );
  * ```
  *
  * @since 1.0.0
  *
- * @package Tribe\Extensions\Custom_Category_Filter;
+ * @package TEC\Extensions\Custom_Category_Filter_Groups;
  */
 
-namespace Tribe\Extensions\Custom_Category_Filter;
+namespace TEC\Extensions\Custom_Category_Filter_Groups;
 
 use Tribe__Main as Common;
 
@@ -28,7 +28,7 @@ use Tribe__Main as Common;
  *
  * @since 1.0.0
  *
- * @package Tribe\Extensions\Custom_Category_Filter;
+ * @package TEC\Extensions\Custom_Category_Filter_Groups;
  */
 class Hooks extends \tad_DI52_ServiceProvider {
 
@@ -39,7 +39,7 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 */
 	public function register() {
 		$this->container->singleton( static::class, $this );
-		$this->container->singleton( 'extension.custom_category_filter.hooks', $this );
+		$this->container->singleton( 'extension.custom_category_filter_groups.hooks', $this );
 
 		$this->add_actions();
 		$this->add_filters();
@@ -70,7 +70,7 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 */
 	public function load_text_domains() {
 		$mopath = tribe( Plugin::class )->plugin_dir . 'lang/';
-		$domain = '__TRIBE_DOMAIN__';
+		$domain = 'tec-labs-custom-category-filter';
 
 		// This will load `wp-content/languages/plugins` files first.
 		Common::instance()->load_text_domain( $domain, $mopath );

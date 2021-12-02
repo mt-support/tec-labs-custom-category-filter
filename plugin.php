@@ -1,15 +1,15 @@
 <?php
 /**
- * Plugin Name:       The Events Calendar Extension: Custom Category Filter
- * Plugin URI:        
- * GitHub Plugin URI: https://github.com/mt-support/tec-labs-custom-category-filter
- * Description:       
- * Version:           1.0.0
+ * Plugin Name:       The Events Calendar Extension: Custom Category Filter Groups (v2)
+ * Plugin URI:
+ * GitHub Plugin URI: https://github.com/mt-support/tec-labs-custom-category-filter-groups
+ * Description:
+ * Version:           0.9.0
  * Author:            The Events Calendar
  * Author URI:        https://evnt.is/1971
  * License:           GPL version 3 or any later version
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
- * Text Domain:       __TRIBE_DOMAIN__
+ * Text Domain:       tec-labs-custom-category-filter
  *
  *     This plugin is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -29,14 +29,14 @@
  *
  * @var string Base file that loaded the plugin.
  */
-define( 'TRIBE_EXTENSION_CUSTOM_CATEGORY_FILTER_FILE', __FILE__ );
+define( 'TEC_EXTENSION_CUSTOM_CATEGORY_FILTER_GROUPS_FILE', __FILE__ );
 
 /**
  * Register and load the service provider for loading the extension.
  *
  * @since 1.0.0
  */
-function tribe_extension_custom_category_filter() {
+function tec_extension_custom_category_filter_groups() {
 	// When we don't have autoloader from common we bail.
 	if ( ! class_exists( 'Tribe__Autoloader' ) ) {
 		return;
@@ -44,16 +44,16 @@ function tribe_extension_custom_category_filter() {
 
 	// Register the namespace so we can the plugin on the service provider registration.
 	Tribe__Autoloader::instance()->register_prefix(
-		'\\Tribe\\Extensions\\Custom_Category_Filter\\',
+		'\\TEC\\Extensions\\Custom_Category_Filter_Groups\\',
 		__DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Tec',
 		'custom-category-filter'
 	);
 
 	// Deactivates the plugin in case of the main class didn't autoload.
-	if ( ! class_exists( '\Tribe\Extensions\Custom_Category_Filter\Plugin' ) ) {
+	if ( ! class_exists( '\TEC\Extensions\Custom_Category_Filter_Groups\Plugin' ) ) {
 		tribe_transient_notice(
 			'custom-category-filter',
-			'<p>' . esc_html__( 'Couldn\'t properly load "The Events Calendar Extension: Custom Category Filter" the extension was deactivated.', '__TRIBE_DOMAIN__' ) . '</p>',
+			'<p>' . esc_html__( 'Couldn\'t properly load "The Events Calendar Extension: Custom Category Filter Groups" the extension was deactivated.', 'tec-labs-custom-category-filter' ) . '</p>',
 			[],
 			// 1 second after that make sure the transient is removed.
 			1
@@ -67,8 +67,8 @@ function tribe_extension_custom_category_filter() {
 		return;
 	}
 
-	tribe_register_provider( '\Tribe\Extensions\Custom_Category_Filter\Plugin' );
+	tribe_register_provider( '\TEC\Extensions\Custom_Category_Filter_Groups\Plugin' );
 }
 
 // Loads after common is already properly loaded.
-add_action( 'tribe_common_loaded', 'tribe_extension_custom_category_filter' );
+add_action( 'tribe_common_loaded', 'tec_extension_custom_category_filter_groups' );
