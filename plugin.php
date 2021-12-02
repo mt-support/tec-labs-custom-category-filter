@@ -3,7 +3,7 @@
  * Plugin Name:       The Events Calendar Extension: Custom Category Filter Groups (v2)
  * Plugin URI:
  * GitHub Plugin URI: https://github.com/mt-support/tec-labs-custom-category-filter-groups
- * Description:
+ * Description:       Add up to five custom category filters to your Filter Bar.
  * Version:           0.9.0
  * Author:            The Events Calendar
  * Author URI:        https://evnt.is/1971

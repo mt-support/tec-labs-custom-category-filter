@@ -1,4 +1,4 @@
-=== The Events Calendar Extension: Custom Category Filter ===
+=== The Events Calendar Extension: Custom Category Filter Groups (v2) ===
 Contributors: theeventscalendar
 Donate link: https://evnt.is/29
 Tags: events, calendar
@@ -9,13 +9,9 @@ Stable tag: 1.0.0
 License: GPL version 3 or any later version
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-
-
 == Description ==
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
-
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and Markdown parsed.
+Add up to five custom category filters to your Filter Bar.
 
 == Installation ==
 
@@ -26,8 +22,9 @@ Install and activate like any other plugin!
 * Once it has been installed or uploaded, simply visit the main plugin list and activate it
 
 == Setup and Customization ==
+
 Each filter group has a `tec_labs_custom_category_{$alias}_filter_wanted_categories` filter, where {$alias} is replaced with the
-filer-specific alias (the number 1-5)
+filer-specific alias (the number 1-5).
 
 This extension is set up to run one custom category filter group. The `tec_labs_custom_category_filter_groups_number` filter
 lets you add additional filter groups (up to 5!). It defaults to one (1) but you can filter this value up to five with
