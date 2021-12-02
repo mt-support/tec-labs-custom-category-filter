@@ -120,13 +120,15 @@ abstract class Abstract_Category_Custom extends \Tribe__Events__Filterbar__Filte
 	 */
 	protected function setup_where_clause() {
 		global $wpdb;
-		$values  = implode( ',', $this->currentValue );
-		if ( empty( $values ) ) {
+		if ( empty( $this->currentValue ) ) {
 			return;
 		}
 
+		$values  = implode( ',', $this->currentValue );
+
+        // Note: prepare does not add quotes if we use an indexed placeholder. We use this to our advantage.
 		$clause = $wpdb->prepare(
-			"{$this->alias}.term_taxonomy_id IN (%s)",
+			$this->alias .'.term_taxonomy_id IN (%1$s)',
 			$values
 		);
 
