@@ -28,7 +28,7 @@ class Plugin_Register extends Abstract_Plugin_Register {
     // Filter Bar itself requires The Events Calendar, so we don't need to add that here.
 	protected $dependencies = [
 		'parent-dependencies' => [
-			'Tribe__Events__Filterbar__View' => '5.2.0',
+			'Tribe__Events__Filterbar__View' => '5.5.0',
 		],
 	];
 }

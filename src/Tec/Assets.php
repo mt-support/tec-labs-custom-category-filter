@@ -15,6 +15,8 @@
 
 namespace TEC\Extensions\Custom_Category_Filter_Groups;
 
+use TEC\Common\Contracts\Service_Provider;
+
 /**
  * Register Assets.
  *
@@ -22,7 +24,7 @@ namespace TEC\Extensions\Custom_Category_Filter_Groups;
  *
  * @package TEC\Extensions\Custom_Category_Filter_Groups
  */
-class Assets extends \tad_DI52_ServiceProvider {
+class Assets extends Service_Provider {
 	/**
 	 * Binds and sets up implementations.
 	 *

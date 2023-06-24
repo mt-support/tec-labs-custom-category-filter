@@ -9,6 +9,7 @@
 
 namespace TEC\Extensions\Custom_Category_Filter_Groups;
 
+use TEC\Common\Contracts\Service_Provider;
 use Tribe__PUE__Checker;
 
 /**
@@ -18,7 +19,7 @@ use Tribe__PUE__Checker;
  *
  * @package TEC\Extensions\Custom_Category_Filter_Groups;
  */
-class PUE extends \tad_DI52_ServiceProvider {
+class PUE extends Service_Provider {
 
 	/**
 	 * The slug used for PUE.

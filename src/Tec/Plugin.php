@@ -9,6 +9,8 @@
 
 namespace TEC\Extensions\Custom_Category_Filter_Groups;
 
+use TEC\Common\Contracts\Service_Provider;
+
 /**
  * Class Plugin
  *
@@ -16,7 +18,7 @@ namespace TEC\Extensions\Custom_Category_Filter_Groups;
  *
  * @package TEC\Extensions\Custom_Category_Filter_Groups
  */
-class Plugin extends \tad_DI52_ServiceProvider {
+class Plugin extends Service_Provider {
 	/**
 	 * Stores the version for the plugin.
 	 *
@@ -24,7 +26,7 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 *
 	 * @var string
 	 */
-	const VERSION = '1.0.0';
+	const VERSION = '1.0.1';
 
 	/**
 	 * Stores the base slug for the plugin.

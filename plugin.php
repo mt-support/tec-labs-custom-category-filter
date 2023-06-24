@@ -4,7 +4,7 @@
  * Plugin URI:
  * GitHub Plugin URI: https://github.com/mt-support/tec-labs-custom-category-filter-groups
  * Description:
- * Version:           0.9.0
+ * Version:           1.0.1
  * Author:            The Events Calendar
  * Author URI:        https://evnt.is/1971
  * License:           GPL version 3 or any later version

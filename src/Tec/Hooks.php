@@ -21,6 +21,7 @@
 
 namespace TEC\Extensions\Custom_Category_Filter_Groups;
 
+use TEC\Common\Contracts\Service_Provider;
 use Tribe__Main as Common;
 
 /**
@@ -30,7 +31,7 @@ use Tribe__Main as Common;
  *
  * @package TEC\Extensions\Custom_Category_Filter_Groups;
  */
-class Hooks extends \tad_DI52_ServiceProvider {
+class Hooks extends Service_Provider {
 
 	/**
 	 * Binds and sets up implementations.
